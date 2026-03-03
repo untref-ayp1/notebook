@@ -1,0 +1,21 @@
+services:
+  notebook:
+    image: jbindinga/java-notebook
+    container_name: ijava-notebook
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    environment:
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-tatu}
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/api"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
